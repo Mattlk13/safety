@@ -111,6 +111,15 @@ echo "insecure-package==0.1" | safety check --stdin
 
 *For more examples, take a look at the [options](#options) section.*
 
+
+### Scan a Python-based Docker image
+
+To scan a docker image `IMAGE_TAG`, you can run
+
+```console
+docker run -it --rm ${IMAGE_TAG} "/bin/bash -c \"pip install safety && safety check\"
+```
+
 ## Using Safety in Docker
 
 Safety can be easily executed as Docker container. It can be used just as
@@ -241,7 +250,7 @@ ___
 
 ### `--full-report`
 
-*Full reports include a security advisory (if available).*
+*Full reports includes a security advisory. It also shows CVSS values for CVEs (requires a premium PyUp subscription).*
 
 **Example**
 ```bash
@@ -267,6 +276,8 @@ safety check --full-report
 | REPORT                                                                       |
 +============================+===========+==========================+==========+
 | package                    | installed | affected                 | ID       |
++============================+===========+==========================+==========+
+| CVSS v2 | BASE SCORE: 6.5 | IMPACT SCORE: 6.4                                |
 +============================+===========+==========================+==========+
 | django                     | 1.2       | <1.2.2                   | 25701    |
 +==============================================================================+
@@ -373,10 +384,10 @@ If you save the report in JSON format you can review in the report format again.
 
 **Example**
 ```bash
-safety check -f insecure.json
+safety review -f insecure.json
 ```
 ```bash
-safety check --file=insecure.json
+safety review --file=insecure.json
 ```
 ___
 
@@ -430,6 +441,115 @@ safety review --file report.json --bare
 ```
 django
 ```
+
+___
+
+# License
+
+Display packages licenses information (requires a premium PyUp subscription).
+
+## Options
+
+### `--key` (REQUIRED)
+
+*API Key for pyup.io's licenses database. Can be set as `SAFETY_API_KEY` environment variable.*
+
+**Example**
+```bash
+safety license --key=12345-ABCDEFGH
+```
+*Shows the license of each package in the current environment*
+
+
+```
++==============================================================================+
+|                                                                              |
+|                               /$$$$$$            /$$                         |
+|                              /$$__  $$          | $$                         |
+|           /$$$$$$$  /$$$$$$ | $$  \__//$$$$$$  /$$$$$$   /$$   /$$           |
+|          /$$_____/ |____  $$| $$$$   /$$__  $$|_  $$_/  | $$  | $$           |
+|         |  $$$$$$   /$$$$$$$| $$_/  | $$$$$$$$  | $$    | $$  | $$           |
+|          \____  $$ /$$__  $$| $$    | $$_____/  | $$ /$$| $$  | $$           |
+|          /$$$$$$$/|  $$$$$$$| $$    |  $$$$$$$  |  $$$$/|  $$$$$$$           |
+|         |_______/  \_______/|__/     \_______/   \___/   \____  $$           |
+|                                                          /$$  | $$           |
+|                                                         |  $$$$$$/           |
+|  by pyup.io                                              \______/            |
+|                                                                              |
++==============================================================================+
+| Packages licenses                                                            |
++=============================================+===========+====================+
+| package                                     |  version  | license            |
++=============================================+===========+====================+
+| requests                                    | 2.25.0    | Apache-2.0         |
+|------------------------------------------------------------------------------|
+| click                                       | 7.1.2     | BSD-3-Clause       |
+|------------------------------------------------------------------------------|
+| safety                                      | 1.10.0    | MIT                |
++==============================================================================+
+```
+
+### `--json` (Optional)
+
+This license command can also be used in conjuction with optional arguments `--bare` and `--json` for structured, parsable outputs that can be fed into other tools and pipelines.
+
+___
+
+### `--db`
+
+*Path to a directory with a local licenses database `licenses.json`*
+
+**Example**
+```bash
+safety license --key=12345-ABCDEFGH --db=/home/safety-db/data
+```
+___
+
+### `--no-cache`
+
+*Since PyUp.io licenses DB is updated once a week, the licenses database is cached locally for 7 days. You can use `--no-cache` to download it once again.*
+
+**Example**
+```bash
+safety license --key=12345-ABCDEFGH --no-cache
+```
+___
+
+### `--file`, `-r`
+
+*Read input from one (or multiple) requirement files.*
+
+**Example**
+```bash
+safety license --key=12345-ABCDEFGH -r requirements.txt
+```
+```bash
+safety license --key=12345-ABCDEFGH --file=requirements.txt
+```
+```bash
+safety license --key=12345-ABCDEFGH -r req_dev.txt -r req_prod.txt
+```
+
+___
+
+
+### `--proxy-host`, `-ph`
+
+*Proxy host IP or DNS*
+
+### `--proxy-port`, `-pp` 
+
+*Proxy port number*
+
+### `--proxy-protocol`, `-pr`
+
+*Proxy protocol (https or http)*
+
+**Example**
+```bash
+safety license --key=12345-ABCDEFGH -ph 127.0.0.1 -pp 8080 -pr https
+```
+
 ___
 
 # Python 2.7

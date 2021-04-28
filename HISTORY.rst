@@ -2,11 +2,36 @@
 History
 =======
 
-1.9.1a (master)
----------------
+1.10.4-dev (master)
+-------------------
 
 * Current unstable version
+
+1.10.3 (2021-01-15)
+-------------------
+
+* Avoid 1.10.2post1 bug with pyup updates
+
+1.10.2 (2021-01-12)
+-------------------
+
+* Provide CVSS values on full report for CVEs (requires a premium PyUp subscription)
+* Fixed used DB wrong info
+* Support line breaks on advisories
+
+1.10.1 (2021-01-03)
+-------------------
+
+* Reduced Docker image and Binary size
+* Added bare and json outputs to license command
+
+1.10.0 (2020-12-20)
+-------------------
+
 * Added README information about Python 2.7 workaround
+* Adjusted some pricing information
+* Fixed MacOS binary build through AppVeyor
+* Added the ability to check packages licenses (requires a premium PyUp subscription)
 
 1.9.0 (2020-04-27)
 ------------------
